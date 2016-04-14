@@ -3,8 +3,8 @@
 '''
 
 # UCS Director:
-UCSD_HOST    = "172.25.58.53"
-UCSD_API_KEY = "8BB0F1AE79AB49E4A505B94E7E571164"
+UCSD_HOST    = "ucsd.example.com"
+UCSD_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 # request constructor:
 UCSD_API_URL = "http://%s/app/api/rest?" # HTTPS?
