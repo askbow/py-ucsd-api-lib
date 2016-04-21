@@ -22,6 +22,7 @@ class UCSD:
 	    self.HTTP_UCSD_COOKIES = dict()
 	    self.HTTP_UCSD_TIMEOUT = 3 # API call timeout in seconds
 	    self.UCSD_API_WorkflowStatus = {0:"EXECUTION_STATUS_NOT_STARTED", 1:"EXECUTION_STATUS_IN_PROGRESS", 2:"EXECUTION_STATUS_FAILED", 3:"EXECUTION_STATUS_COMPLETED", 4:"EXECUTION_STATUS_COMPLETED_WITH_WARNING", 5:"EXECUTION_STATUS_CANCELLED", 6:"EXECUTION_STATUS_PAUSED", 7:"EXECUTION_STATUS_SKIPPED",}
+	    self.UCSD_USERDIR = dict()
 
     #############################################################################################################
     ## basic API machinery
@@ -36,7 +37,7 @@ class UCSD:
 	    # exceptions to catch later: http://docs.python-requests.org/en/master/user/quickstart/#errors-and-exceptions
 	    if r.status_code == requests.codes.ok:  
 	        self.HTTP_UCSD_COOKIES = r.cookies # saving cookies 
-	        return r.text
+	        #return r.text
 	        if ('application/json' in r.headers.get('content-type')):
 	            return ucsdJsonParser(r.text)
 	        elif ('xml' in r.headers.get('content-type')):
@@ -217,12 +218,27 @@ class UCSD:
     ## User functions
     ##
     ## NOTE: this is important, because many request results are auto-filtered based on user's context, which is
-    ##       determined by the user name; If I understand the docs correctly, this call is used to impersonate a user:
+    ##       determined by the user name; If I understand the docs correctly, this call may be used to impersonate a user:
     
     def GetUserApiKey(self,user=""):
         UCSD_API_OPNAME = "userAPIGetRESTAccessKey"
         u = "{param0:\"" + user + '"}'
         res = self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
-        if res["serviceError"] == null: return res
-        return Null
+        return res
+        #return Null
+	
+    def DoUserSave(self, user=""):
+	    # this is a wrapper around GetUserApiKey(self,user="")
+		a = self.GetUserApiKey(user=user)
+		try:
+		    if a: 
+			    if not a[u'serviceError']: 
+			        self.UCSD_USERDIR[user] = dict()
+			        self.UCSD_USERDIR[user]["key"] = a[u'serviceResult']
+			        self.UCSD_USERDIR[user]["ucsd"] = UCSD(host = self.UCSD_HOST, adminKey = a[u'serviceResult'])
+			    pass
+		    pass
+		except: pass
+	#
+
 #
