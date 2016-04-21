@@ -66,6 +66,22 @@ class UCSD:
     # TODO: params expander dict->json
     ####################################
     	
+        
+        
+    def ___GetContextList(self):
+        UCSD_API_OPNAME = "userAPIGetAllContexts"
+        u = ""
+        res = self.___APIcall___(APIOP=UCSD_API_OPNAME, params=u)
+        return res
+        
+    def GetContextList(self,):
+        a = self.___GetContextList()
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult']
+        except: return None
+        return None
+        
     #############################################################################################################	
     ## Reporting General
     ## Doesn't work at the moment
