@@ -18,8 +18,8 @@ I'm trying to make a wrapper that will work with my UCSD lab setup.
 
 # Goals
 - Clear GET / DO separation is one of my primary goals; i.e. each function MUST either GET a state or DO something (change state); other options are possible - I'll be flexible with that
-- all functions MUST return either a directly usable (parsed) data structures, or None in case of failures
-- failures MUST be logged
+- all functions MUST return either a directly usable (parsed) data structures, or None in case of failures (so it's easy to check against them)
+- failures MUST be logged somehow, but we can't stop working entirely, as this is supposed to be a backend
 
 # Usage
 Just 'from pyucsd import *' should be enouth.
