@@ -133,13 +133,36 @@ class UCSD:
         u = '{param0:{"list":[{"name":"APIServiceRequestParams","value":{"list":[{"name":"srId","value":' + ID + '}]}]}}'
         res = self.___APIpreparse___(self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u))
         return res	
+
+
+
+    '''
+    An example of two UCSD APIs to do the same thing, get the list of available workflows:
+    userAPIGetWorkflows:
+    {"id":150,"name":"Firewall management","version":0,"description":"Firewall management","isActive":true,"contextType":0,"isSaveAsTasklet":false,"publishCompoundTaskOutputs":false,"startupWorkflow":false,"isNewFolder":false,"newFolderName":null,"existingFolderName":null,"noOfInputFields":0,"isLocked":false,"isHidden":false,"folderName":"HSS","activityName":null,"isActivity":false,"isSendEmailNotification":false,"emailIdList":"","emailPolicy":"No e-mail","emailIdListToNotify":"","lastValidatedTime":1459509586147,"lastValidatedStatus":"OK","isActiveVersion":true,"createdDateTime":0,"versionDescription":null,"userAssignedVersionTag":"0","lastModifiedDateTime":1459507782942}
     
-    def GetWorkflowList(self,folder=""):
-        UCSD_API_OPNAME = "userAPIGetWorkflows"
-        u = '{param0:{"list":[{"name":"folderName","value":"' + folder + '"}]}}'
-        res = self.___APIpreparse___(self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u))
+    userAPIGetTabularReport WORKFLOWS-T46:
+    {"Workflow_ID":150,"Workflow_Name":"Firewall management","Workflow_Description":"Firewall management","Validation_Status":"OK","Last_Validated":"2 weeks 6 days  ago","Compound_Task":"No","Version_Label":"0","Version":"version 0 (latest)","Workflow_Locked":"No","Workflow_Folder":"HSS"}
+    '''         
+    def ___GetWorkflowList(self,folder="", type="report"):
+        UCSD_API_OPNAME = "userAPIGetWorkflows" 
+        u = '{param0:"%s"}'%folder
+        if type=="report":
+            UCSD_API_OPNAME = "userAPIGetTabularReport"
+            u = '{param0:"10",param1:"null",param2:"WORKFLOWS-T46"}'
+        res = self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
         return res
-    	
+    
+    def GetWorkflowList(self,folder="", type="report"):
+        a = self.___GetWorkflowList()
+        try:
+            if a:
+                if not (folder==""): filter = { u'Workflow_Folder': folder}
+                else: filter = dict()
+                if not a[u'serviceError']: return list_search(a[u'serviceResult'][u'rows'], filter)
+        except: return None
+        return None
+    
     def GetWorkflowSteps(self,ID=0):
         UCSD_API_OPNAME = "userAPIGetWorkflowSteps"
         u = '{param0:{"list":[{"name":"APIServiceRequestParams","value":{"list":[{"name":"requestId","value":' + ID + '}]}]}}'
@@ -154,12 +177,19 @@ class UCSD:
     
     
     
-    def GetWorkflowInputs(self,name=""):
+    def ___GetWorkflowInputs(self,name=""):
         UCSD_API_OPNAME = "userAPIGetWorkflowInputs"
-        u = '{param0:{"list":[{"name":"workflowName","value":"' + name + '"}]}}'
+        u = '{param0:"' + name + '"}'
         res = self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
-        if res["serviceError"] == null: return res
-        return Null
+        return res
+    
+    def GetWorkflowInputs(self,name=""):
+        a = self.___GetWorkflowInputs(name=name)
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult'][u'details']
+        except: return None
+        return None
     
     def GetWorkflowInputLOV(self,type=""):
         UCSD_API_OPNAME = "userAPIGetLOVValues"
