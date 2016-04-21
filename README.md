@@ -32,8 +32,11 @@ Maybe I'll get to write some usage examples someday.
 I know it's wrong, but no tests right now. Primarily because I'm yet to learn how to write them ;-)
 This makes this libe unsuitable for production.
 
-## Dependencies (non-standard lib)
+## Dependencies (non-standard libs)
+* Used for response parsing:
 - defusedxml.ElementTree
+- pyyaml
+- demjson
 
 # Related work & due credit
 This repository was greatly influenced by work done by hpreston ( https://github.com/hpreston/cisco_cloud ).

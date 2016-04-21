@@ -111,16 +111,46 @@ def xml2dict(xml):
 ################################################
 ## JSON-to-dictionary parser
 ## because UCSD sometimes would return some weird stuff
+import yaml
+import demjson
 def ucsdJsonParser(text):
-    jsondict
-	
+    jsondict = None
+    if text: 
+        try: 
+		    jsondict = json.loads(text)
+        except: pass
+		# we're here because standard JSON parser failed to make sense of the input
+        # try interpreting as YAML:
+        try: 
+		    jsondict = yaml.loads(text)
+        except: pass
+		# we're here because standard YAML parser failed to make sense of the input
+        # try alternative JSON lib:
+        try: 
+		    jsondict = demjson.decode(text)
+        except: pass
+		# inconceivable!
+		
     return jsondict
 #
 
 
 
 
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
