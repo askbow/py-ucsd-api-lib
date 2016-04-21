@@ -13,7 +13,7 @@ def dict_filter(source_dict, filter_list):
     result = {key: source_dict[key] for key in filter_list}
     # print result
     return result
-
+#
 def list_search(list, result_filter):
     '''
     Filter down a given list of dictionaries for only those elements where there is
@@ -33,7 +33,7 @@ def list_search(list, result_filter):
                 new_list.append(l)
                 break
     return new_list
-
+#
 
 
 ################################################
@@ -56,7 +56,7 @@ class XmlListConfig(list):
                 if text:
                     self.append(text)
 
-
+#
 class XmlDictConfig(dict):
     '''
     Example usage:
@@ -102,15 +102,34 @@ class XmlDictConfig(dict):
             # the text
             else:
                 self.update({element.tag: element.text})
-
+#
 def xml2dict(xml):
     root = ElementTree.XML(xml_string)
     xmldict = XmlDictConfig(root)
     return xmldict
-
+#
 ################################################
 ## JSON-to-dictionary parser
 ## because UCSD sometimes would return some weird stuff
 def ucsdJsonParser(text):
-    jsondict = dict()
+    jsondict
+	
     return jsondict
+#
+
+
+
+
+#
+
+
+
+
+
+
+
+
+
+
+
+

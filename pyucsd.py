@@ -225,6 +225,4 @@ class UCSD:
         res = self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
         if res["serviceError"] == null: return res
         return Null
-    	
-    	
-    
+#
