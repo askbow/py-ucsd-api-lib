@@ -107,3 +107,10 @@ def xml2dict(xml):
     root = ElementTree.XML(xml_string)
     xmldict = XmlDictConfig(root)
     return xmldict
+
+################################################
+## JSON-to-dictionary parser
+## because UCSD sometimes would return some weird stuff
+def ucsdJsonParser(text):
+    jsondict = dict()
+    return jsondict
