@@ -23,7 +23,8 @@ class UCSD:
 	    self.HTTP_UCSD_TIMEOUT = 3 # API call timeout in seconds
 	    self.UCSD_API_WorkflowStatus = {0:"EXECUTION_STATUS_NOT_STARTED", 1:"EXECUTION_STATUS_IN_PROGRESS", 2:"EXECUTION_STATUS_FAILED", 3:"EXECUTION_STATUS_COMPLETED", 4:"EXECUTION_STATUS_COMPLETED_WITH_WARNING", 5:"EXECUTION_STATUS_CANCELLED", 6:"EXECUTION_STATUS_PAUSED", 7:"EXECUTION_STATUS_SKIPPED",}
 	    self.UCSD_USERDIR = dict()
-
+    def __repr__(self):
+	    return "UCSD.API.WRAPPER(%s)" % self.UCSD_HOST
     #############################################################################################################
     ## basic API machinery
     def ___APIcall___(self,APIOP, params=""):
