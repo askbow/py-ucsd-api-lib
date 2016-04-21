@@ -39,7 +39,7 @@ def list_search(list, result_filter):
 ################################################
 ## XML-to-dictionary parser by James at http://stackoverflow.com/a/5807028
 
-import cElementTree as ElementTree
+import defusedxml.cElementTree as ElementTree
 
 class XmlListConfig(list):
     def __init__(self, aList):

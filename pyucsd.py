@@ -31,18 +31,18 @@ def ___APIcall___(APIOP, params=""):
 	   url = url + UCSD_API_OPDATA_PREP + params
 	try:
 	    r = requests.get(url, headers=HTTP_REQ_HEADERS, cookies = HTTP_UCSD_COOKIES, timeout=timeout)
-	except raise  # most useful during debugging
+	except: raise  # most useful during debugging
 	# exceptions to catch later: http://docs.python-requests.org/en/master/user/quickstart/#errors-and-exceptions
 	if r.status_code == requests.codes.ok:  
 	    HTTP_UCSD_COOKIES = r.cookies # saving cookies 
-		if ('application/json' in r.headers.get('content-type')):
+	    if ('application/json' in r.headers.get('content-type')):
 		    return r.json()
-		else if ('xml' in r.headers.get('content-type')):
+	    elif ('xml' in r.headers.get('content-type')):
 		    return xml2dict(r.text)
-		else return None      # to do: add logging
-    else r.raise_for_status() # seems the most useful thing to do, while I'm debugging this; later will need to think of some better logic
+	    else: return None      # to do: add logging
+	else: r.raise_for_status() # seems the most useful thing to do, while I'm debugging this; later will need to think of some better logic
 
-def ___APIclearCookies___:
+def ___APIclearCookies___():
     HTTP_UCSD_COOKIES = dict()
 
 def ___APIpreparse___(jj):
@@ -50,10 +50,11 @@ def ___APIpreparse___(jj):
 	# returns a less-raw dictionary (serviceResult only) or None
     # need a more complex preparsing:
 	# - error / exception check, like "serviceError":null
-	if jj:
-        if j['serviceResult']:  return j['serviceResult']
-		else: return None
-	else: return None # to do: add logging
+    if jj:
+        if j['serviceResult']:  
+		    return j['serviceResult']
+        else: return None
+    else: return None # to do: add logging
 
 ####################################
 # TODO: params expander dict->json
@@ -118,7 +119,7 @@ def DoWorkflowRun(name="", params = dict()):
     UCSD_API_OPNAME = "userAPISubmitWorkflowServiceRequest"
     u = "{param0:\"" + name + '",' + 'param1:{' + ___APIworkflowParamsConstructor___(params) + '}' + ',param2:-1}'
     res = ___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
-    if res["serviceError"] = null: return res
+    if res["serviceError"] == null: return res
     return Null
 
 def DoWorkflowRollback():
@@ -147,25 +148,25 @@ def GetWorkflowStatus(ID=0):
 
 WorkflowStatus = {0:"EXECUTION_STATUS_NOT_STARTED", 1:"EXECUTION_STATUS_IN_PROGRESS", 2:"EXECUTION_STATUS_FAILED", 3:"EXECUTION_STATUS_COMPLETED", 4:"EXECUTION_STATUS_COMPLETED_WITH_WARNING", 5:"EXECUTION_STATUS_CANCELLED", 6:"EXECUTION_STATUS_PAUSED", 7:"EXECUTION_STATUS_SKIPPED",}
 
-def GetWorkflowInputs(name="")
+def GetWorkflowInputs(name=""):
     UCSD_API_OPNAME = "userAPIGetWorkflowInputs"
     u = '{param0:{"list":[{"name":"workflowName","value":"' + name + '"}]}}'
     res = ___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
-    if res["serviceError"] = null: return res
+    if res["serviceError"] == null: return res
     return Null
 
 def GetWorkflowInputLOV(type=""):
     UCSD_API_OPNAME = "userAPIGetLOVValues"
     u = '{param0:{"list":[{"name":"type","value":"' + type + '"}]}}'
     res = ___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
-    if res["serviceError"] = null: return res
+    if res["serviceError"] == null: return res
     return Null
 	
 def GetWorkflowInputTable(type=""):
     UCSD_API_OPNAME = "userAPIGetLOVValues"
     u = '{param0:{"list":[{"name":"type","value":"' + type + '"}]}}'
     res = ___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
-    if res["serviceError"] = null: return res
+    if res["serviceError"] == null: return res
     return Null
 
 #############################################################################################################
@@ -219,7 +220,7 @@ def GetUserApiKey(user=""):
     UCSD_API_OPNAME = "userAPIGetRESTAccessKey"
     u = "{param0:\"" + user + '"}'
     res = ___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
-    if res["serviceError"] = null: return res
+    if res["serviceError"] == null: return res
     return Null
 	
 	
