@@ -112,11 +112,20 @@ class UCSD:
     #############################################################################################################
     ## Policies->Catalogs
     
-    def GetCatalogAllUsers(self,):
+    def ___GetCatalogAllUsers(self,):
         UCSD_API_OPNAME = "userAPIGetTabularReport"
         u = '{param0:"10",param1:"",param2:"CATALOG-T40"}'
         res = self.___APIpreparse___(self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u))
         return res
+    
+    def GetCatalogAllUsers(self,):
+        a = self.___GetCatalogAllUsers()
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult'][u'rows']
+        except: return None
+        return None
+    
     
     #############################################################################################################
     ## Workflows & Service Requests
@@ -137,8 +146,8 @@ class UCSD:
 
 
     '''
-    An example of two UCSD APIs to do the same thing, get the list of available workflows:
-    userAPIGetWorkflows:
+    An example of two UCSD API calls to do the same thing - get the list of available workflows:
+    userAPIGetWorkflows - parked in "Legacy tasks" directory in REST API browser:
     {"id":150,"name":"Firewall management","version":0,"description":"Firewall management","isActive":true,"contextType":0,"isSaveAsTasklet":false,"publishCompoundTaskOutputs":false,"startupWorkflow":false,"isNewFolder":false,"newFolderName":null,"existingFolderName":null,"noOfInputFields":0,"isLocked":false,"isHidden":false,"folderName":"HSS","activityName":null,"isActivity":false,"isSendEmailNotification":false,"emailIdList":"","emailPolicy":"No e-mail","emailIdListToNotify":"","lastValidatedTime":1459509586147,"lastValidatedStatus":"OK","isActiveVersion":true,"createdDateTime":0,"versionDescription":null,"userAssignedVersionTag":"0","lastModifiedDateTime":1459507782942}
     
     userAPIGetTabularReport WORKFLOWS-T46:
