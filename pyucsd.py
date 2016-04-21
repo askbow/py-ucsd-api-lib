@@ -94,20 +94,37 @@ class UCSD:
     
     #############################################################################################################
     ## Report Templates
-    def GetReportsReportBuilderTemplates(self,):
+    def ___GetReportsReportBuilderTemplates(self,):
         # Gets a list of all report templates in the system
         UCSD_API_OPNAME = "userAPIGetTabularReport"
         u = '{param0:"10",param1:"null",param2:"REPORT-BUILDER-TEMPLATES-T63"}'
-        res = self.___APIpreparse___(self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u))
+        res = self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
         return res	# {"Id":"templateID","Name":"some name","Description":"some description"}
     
-    def GetReportsReportBuilder(self,templateID):
+    def GetReportsReportBuilderTemplates(self,):
+        a = self.___GetReportsReportBuilderTemplates()
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult'][u'rows']
+        except: return None
+        return None
+    
+    
+    def ___GetReportsReportBuilder(self,templateID):
         # Gets a table of reports generated using selected template	
         UCSD_API_OPNAME = "userAPIGetTabularReport"
-        u = '{param0:"654",param1:"'+ templateID + '",param2:"REPORT-BUILDER-TEMPLATES-T63"}'
-        res = self.___APIpreparse___(self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u))
+        u = '{param0:"654",param1:"'+ templateID + '",param2:"CUSTOM-REPORTS-T63"}' # you get the same with "CLOUD_SENSE_REPORT_BUILDER_CUSTOM_REPORTS_REPORT"
+        # 654 is some sort of "type"
+        res = self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
         return res
     
+    def GetReportsReportBuilder(self,templateID):
+        a = self.___GetReportsReportBuilder(templateID)
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult'][u'rows']
+        except: return None
+        return None
     	
     #############################################################################################################
     ## Policies->Catalogs
