@@ -56,11 +56,11 @@ class UCSD:
     	# returns a less-raw dictionary (serviceResult only) or None
         # need a more complex preparsing:
     	# - error / exception check, like "serviceError":null
-        if jj:
-            if jj['serviceResult']:  
-    		    return jj['serviceResult']
-            else: return jj
-        else: return None # to do: add logging
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult'][u'rows']
+        except: return None
+        return None
     
     ####################################
     # TODO: params expander dict->json
@@ -178,6 +178,7 @@ class UCSD:
     #############################################################################################################
     ## some VM-related functions
     
+    def ___GetVMList(self,): # only works if called with admin privileges; other users receive HTTP401
         UCSD_API_OPNAME = "userAPIGetAllVMs"
         u = ""
         res = self.___APIpreparse___(self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u))
@@ -191,9 +192,9 @@ class UCSD:
         except: return None
         return None
 
-    def DoVMaction(self,action, vmid, comstr=""):
+    def DoVMaction(self,action, vmid, comstr=""): # ussue: this API call to my lab UCSD timeouts
         UCSD_API_OPNAME = "userAPIExecuteVMAction"
-        allowed_actions = ["discardSaveState",
+        generic_actions = ["discardSaveState",
                            "pause",
                            "powerOff",
                            "powerOn",
@@ -207,21 +208,28 @@ class UCSD:
                            "standby",
                            "suspend",
                            ]
-        if (not any(action == a for a in generic_actions)): return "Action not valid"
+        if (not any(action == a for a in generic_actions)): 
+            return None
         comments = 'API-VM-ACT-%s: "%s"' % (action, comstr)
         u = "{param0:\"" + vmid + '",' + 'param1:"' + action + '"' + ',param2:"' + comments + '"}'
         res = self.___APIpreparse___(self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u))
         return res['rows']
     
-    def GetVMcompletedActions(self,vmid):
+    def ___GetVMcompletedActions(self,vmid):
         UCSD_API_OPNAME = "userAPIGetTabularReport"
         param0 = "3"
         param1 = vmid 
         param2 = "VM-ACTION-REQUESTS-T0"
         u = "{param0:\"" + param0 + '",' + 'param1:"' + param1 + '"' + ',param2:"' + param2 + '"}'
         res = self.___APIpreparse___(self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u))
-        return res['rows']
-    
+        return res
+    def GetVMcompletedActions(self,vmid):
+        a = self.___GetVMcompletedActions(vmid)
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult'][u'rows']
+        except: return None
+        return None
     	
     #############################################################################################################
     ## User functions
