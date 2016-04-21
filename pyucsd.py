@@ -221,22 +221,29 @@ class UCSD:
     ## NOTE: this is important, because many request results are auto-filtered based on user's context, which is
     ##       determined by the user name; If I understand the docs correctly, this call may be used to impersonate a user:
     
-    def GetUserApiKey(self,user=""):
+    def __GetUserApiKey(self,user=""):
         UCSD_API_OPNAME = "userAPIGetRESTAccessKey"
         u = "{param0:\"" + user + '"}'
         res = self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
         return res
         #return Null
+    
+	def GetUserApiKey(self,user=""):
+        a = self.GetUserApiKey(user=user)
+		try:
+		    if a:
+			    if not a[u'serviceError']: return a[u'serviceResult']
+		except: return None
+        #return Null
 	
     def DoUserSave(self, user=""):
-	    # this is a wrapper around GetUserApiKey(self,user="")
+	    # this is a wrapper around GetUserApiKey(self,user="") to reuse the call results
 		a = self.GetUserApiKey(user=user)
 		try:
 		    if a: 
-			    if not a[u'serviceError']: 
-			        self.UCSD_USERDIR[user] = dict()
-			        self.UCSD_USERDIR[user]["key"] = a[u'serviceResult']
-			        self.UCSD_USERDIR[user]["ucsd"] = UCSD(host = self.UCSD_HOST, adminKey = a[u'serviceResult'])
+			    self.UCSD_USERDIR[user] = dict()
+			    self.UCSD_USERDIR[user]["key"] = a
+			    self.UCSD_USERDIR[user]["ucsd"] = UCSD(host = self.UCSD_HOST, adminKey = a)
 			    pass
 		    pass
 		except: pass
