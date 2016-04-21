@@ -66,7 +66,8 @@ class UCSD:
     # TODO: params expander dict->json
     ####################################
     	
-        
+    #############################################################################################################	
+    ## Contexts
         
     def ___GetContextList(self):
         UCSD_API_OPNAME = "userAPIGetAllContexts"
@@ -81,6 +82,25 @@ class UCSD:
                 if not a[u'serviceError']: return a[u'serviceResult']
         except: return None
         return None
+        
+        
+    #############################################################################################################	
+    ## vDC
+    
+    def ___GetVDCList(self):
+        UCSD_API_OPNAME = "userAPIGetAllVDCs"
+        u = ""
+        res = self.___APIcall___(APIOP=UCSD_API_OPNAME, params=u)
+        return res
+        
+    def GetVDCList(self,):
+        a = self.___GetVDCList()
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult'][u'rows']
+        except: return None
+        return None
+     
         
     #############################################################################################################	
     ## Reporting General
