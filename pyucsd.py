@@ -45,6 +45,7 @@ class UCSD:
 	            return xml2dict(r.text)
 	        else: return None      # to do: add logging
 	    else: r.raise_for_status() # seems the most useful thing to do, while I'm debugging this; later will need to think of some better logic
+        # requests.exceptions.HTTPError: 401 Client Error: Unauthorized
     
     def ___APIclearCookies___(self,):
         self.HTTP_UCSD_COOKIES = dict()
@@ -177,12 +178,19 @@ class UCSD:
     #############################################################################################################
     ## some VM-related functions
     
-    def GetVMList(self,):
         UCSD_API_OPNAME = "userAPIGetAllVMs"
         u = ""
         res = self.___APIpreparse___(self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u))
         return res
-    
+
+    def GetVMList(self):
+        a = self.___GetVMList()
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult'][u'rows']
+        except: return None
+        return None
+
     def DoVMaction(self,action, vmid, comstr=""):
         UCSD_API_OPNAME = "userAPIExecuteVMAction"
         allowed_actions = ["discardSaveState",
