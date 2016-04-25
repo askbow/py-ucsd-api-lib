@@ -125,18 +125,30 @@ class UCSD:
         for r in res:
     	    print "%s\t%s\t%s\n" % (r[u'reportLabel'],r[u'reportType'],r[u'reportId'])
     
-    def GetReportTabular(self,contextName, contextValue, reportId):
+    def ___GetReportTabular(self,contextName, contextValue, reportId):
+	    # contextValue - u'Group_ID'
         UCSD_API_OPNAME = "userAPIGetTabularReport"
         u = "{param0:\"" + contextName + '",' + 'param1:"' + contextValue + '", param2:"' + reportId + '"}'
         res = self.___APIcall___(APIOP=UCSD_API_OPNAME, params=u)
         return res
     
-    def GetReportHistorical(self,contextName, contextValue, reportId, durationName):
+    def ___GetReportHistorical(self,contextName, contextValue, reportId, durationName):
+	    # contextValue - u'Group_Name'
         UCSD_API_OPNAME = "userAPIGetHistoricalReport"
         u = "{param0:\"" + contextName + '",' + 'param1:"' + contextValue + '", param2:"' + reportId + '", param3:"' +durationName + '"}'
-        res = self.___APIpreparse___(self.___APIcall___(APIOP=UCSD_API_OPNAME, params=u))
+        res = self.___APIcall___(APIOP=UCSD_API_OPNAME, params=u)
         return res
     
+    def GetReportHistorical(self,contextName, contextValue, reportId, durationName):
+        durations = ["hourly", "daily", "weekly", "monthly",]
+        if (not any(durationName == a for a in durations)): return None
+        a = self.___GetReportHistorical(contextName=contextName, contextValue=contextValue, reportId=reportId, durationName=durationName)
+         try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult'][u'series']
+        except: return None
+        return None
+	
     #############################################################################################################
     ## Report Templates
     def ___GetReportsReportBuilderTemplates(self,):
