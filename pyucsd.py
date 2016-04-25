@@ -143,9 +143,24 @@ class UCSD:
         durations = ["hourly", "daily", "weekly", "monthly",]
         if (not any(durationName == a for a in durations)): return None
         a = self.___GetReportHistorical(contextName=contextName, contextValue=contextValue, reportId=reportId, durationName=durationName)
-         try:
+        try:
             if a:
                 if not a[u'serviceError']: return a[u'serviceResult'][u'series']
+        except: return None
+        return None
+	
+    def ___GetReportSnapshot(self,contextName, contextValue, reportId):
+	    # contextValue - u'Group_Name'
+        UCSD_API_OPNAME = "userAPIGetInstantDataReport"
+        u = "{param0:\"" + contextName + '",' + 'param1:"' + contextValue + '", param2:"' + reportId + '"}'
+        res = self.___APIcall___(APIOP=UCSD_API_OPNAME, params=u)
+        return res
+	
+    def GetReportSnapshot(self,contextName, contextValue, reportId):
+        a = self.___GetReportSnapshot(contextName=contextName, contextValue=contextValue, reportId=reportId)
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult']
         except: return None
         return None
 	
