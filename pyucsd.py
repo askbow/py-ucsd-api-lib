@@ -353,6 +353,22 @@ class UCSD:
         except: return None
         return None
 	
+	def ___GetUserLoginProfile(self,user=""):
+	    UCSD_API_OPNAME = "userAPIGetMyLoginProfile"
+	    u = ""
+	    if not(user==""): self.UCSD_API_KEY = self.GetUserApiKey(user=user)
+	    res = self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
+	    self.UCSD_API_KEY = self.UCSD_API_KEY_ADMIN
+	    return res
+
+    def GetUserLoginProfile(self,user=""):
+        a = self.___GetUserLoginProfile(user=user)
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult']
+        except: return None
+        return None
+		
     def DoUserSave(self, user=""):
 	    # this is a wrapper around GetUserApiKey(self,user="") to reuse the call results
 		a = self.GetUserApiKey(user=user)
