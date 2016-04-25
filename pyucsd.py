@@ -105,7 +105,7 @@ class UCSD:
         
     #############################################################################################################	
     ## Reporting General
-    ## Doesn't work at the moment
+    ## 
     
     def ___GetReportsList(self,contextName, contextValue):
         UCSD_API_OPNAME = "userAPIGetAvailableReports"
