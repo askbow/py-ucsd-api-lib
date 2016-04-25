@@ -296,8 +296,8 @@ class UCSD:
 
 	def ___GetVMListForUser(self, userName=""):
 	    user = u.GetUserLoginProfile(user=userName)
-		report = u.GetReportTabular(contextName=CONTEXT_TYPE_GROUP, contextValue=str(user[u'groupId']), reportId="VMS-T14")
-		return report
+	    report = u.GetReportTabular(contextName=CONTEXT_TYPE_GROUP, contextValue=str(user[u'groupId']), reportId="VMS-T14")
+	    return report
 		
     def GetVMListForUser(self, userName=""):
         a = self.___GetVMListForUser(userName=userName)
@@ -345,7 +345,25 @@ class UCSD:
                 if not a[u'serviceError']: return a[u'serviceResult'][u'rows']
         except: return None
         return None
-    	
+
+    #############################################################################################################
+    ## Group functions
+    ##
+    
+    def ___GetGroupList(self):
+        UCSD_API_OPNAME = "userAPIGetTabularReport"
+        u = '{param0:"10",param1:"null",param2:"CUSTOMER-ORGANIZATIONS-T23"}'
+        res = self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
+        return res
+
+    def GetGroupList(self):
+        a = self.___GetGroupList()
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult'][u'rows']
+        except: return None
+        return None
+		
     #############################################################################################################
     ## User functions
     ##
