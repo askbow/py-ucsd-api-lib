@@ -43,7 +43,7 @@ class UCSD:
 	            return ucsdJsonParser(r.text)
 	        elif ('xml' in r.headers.get('content-type')):
 	            return xml2dict(r.text)
-	        else: return None      # to do: add logging
+	        else: return r.text      # to do: add logging
 	    else: r.raise_for_status() # seems the most useful thing to do, while I'm debugging this; later will need to think of some better logic
         # requests.exceptions.HTTPError: 401 Client Error: Unauthorized
     
@@ -106,12 +106,20 @@ class UCSD:
     ## Reporting General
     ## Doesn't work at the moment
     
-    def GetReportsList(self,contextName, contextValue):
+    def ___GetReportsList(self,contextName, contextValue):
         UCSD_API_OPNAME = "userAPIGetAvailableReports"
         u =  "{param0:\"" + contextName + '",' + 'param1:"' + contextValue + '"}'
         res = self.___APIpreparse___(self.___APIcall___(APIOP=UCSD_API_OPNAME, params=u))
         return res
-    
+
+    def GetReportsList(self,contextName, contextValue):
+        a = self.___GetReportsList(contextName, contextValue)
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult']
+        except: return None
+        return None
+		
     def ___PrintGetReportsAvailable___(self,res):
         for r in res:
     	    print "%s\t%s\t%s\n" % (r[u'reportLabel'],r[u'reportType'],r[u'reportId'])
@@ -119,7 +127,7 @@ class UCSD:
     def GetReportTabular(self,contextName, contextValue, reportId):
         UCSD_API_OPNAME = "userAPIGetTabularReport"
         u = "{param0:\"" + contextName + '",' + 'param1:"' + contextValue + '", param2:"' + reportId + '"}'
-        res = self.___APIpreparse___(self.___APIcall___(APIOP=UCSD_API_OPNAME, params=u))
+        res = self.___APIcall___(APIOP=UCSD_API_OPNAME, params=u)
         return res
     
     def GetReportHistorical(self,contextName, contextValue, reportId, durationName):
@@ -206,8 +214,9 @@ class UCSD:
     userAPIGetTabularReport WORKFLOWS-T46:
     {"Workflow_ID":150,"Workflow_Name":"Firewall management","Workflow_Description":"Firewall management","Validation_Status":"OK","Last_Validated":"2 weeks 6 days  ago","Compound_Task":"No","Version_Label":"0","Version":"version 0 (latest)","Workflow_Locked":"No","Workflow_Folder":"HSS"}
     '''         
-    def ___GetWorkflowList(self,folder="", type="report"):
-        UCSD_API_OPNAME = "userAPIGetWorkflows" 
+    def ___GetWorkflowList(self,folder="", type="new"):
+        UCSD_API_OPNAME = "userAPIGetWorkflows" # deprecated since UCSD Release 4.1 
+		if type="new": UCSD_API_OPNAME = "userAPIGetWorkflowInputs"
         u = '{param0:"%s"}'%folder
         if type=="report":
             UCSD_API_OPNAME = "userAPIGetTabularReport"
