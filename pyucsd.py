@@ -132,6 +132,14 @@ class UCSD:
         res = self.___APIcall___(APIOP=UCSD_API_OPNAME, params=u)
         return res
     
+    def GetReportTabular(self,contextName, contextValue, reportId):
+        a = self.___GetReportTabular(contextName=contextName, contextValue=contextValue, reportId=reportId)
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult'][u'rows']
+        except: return None
+        return None
+    
     def ___GetReportHistorical(self,contextName, contextValue, reportId, durationName):
 	    # contextValue - u'Group_Name'
         UCSD_API_OPNAME = "userAPIGetHistoricalReport"
