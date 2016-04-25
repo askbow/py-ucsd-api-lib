@@ -49,6 +49,7 @@ class UCSD:
     
     def ___APIclearCookies___(self,):
         self.HTTP_UCSD_COOKIES = dict()
+        self.HTTP_REQ_HEADERS["X-Cloupia-Request-Key"] = self.UCSD_API_KEY
     
     def ___APIpreparse___(self,jj):
         return jj
@@ -216,7 +217,7 @@ class UCSD:
     '''         
     def ___GetWorkflowList(self,folder="", type="new"):
         UCSD_API_OPNAME = "userAPIGetWorkflows" # deprecated since UCSD Release 4.1 
-		if type="new": UCSD_API_OPNAME = "userAPIGetWorkflowInputs"
+        if type=="new": UCSD_API_OPNAME = "userAPIGetWorkflowInputs"
         u = '{param0:"%s"}'%folder
         if type=="report":
             UCSD_API_OPNAME = "userAPIGetTabularReport"
@@ -293,6 +294,19 @@ class UCSD:
         except: return None
         return None
 
+	def ___GetVMListForUser(self, userName=""):
+	    user = u.GetUserLoginProfile(user=userName)
+		report = u.GetReportTabular(contextName=CONTEXT_TYPE_GROUP, contextValue=str(user[u'groupId']), reportId="VMS-T14")
+		return report
+		
+    def GetVMListForUser(self, userName=""):
+        a = self.___GetVMListForUser(userName=userName)
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult'][u'rows']
+        except: return None
+        return None
+		
     def DoVMaction(self,action, vmid, comstr=""): # ussue: this API call to my lab UCSD timeouts
         UCSD_API_OPNAME = "userAPIExecuteVMAction"
         generic_actions = ["discardSaveState",
@@ -353,10 +367,12 @@ class UCSD:
         except: return None
         return None
 	
-	def ___GetUserLoginProfile(self,user=""):
+    def ___GetUserLoginProfile(self,user=""):
 	    UCSD_API_OPNAME = "userAPIGetMyLoginProfile"
 	    u = ""
-	    if not(user==""): self.UCSD_API_KEY = self.GetUserApiKey(user=user)
+	    if not(user==""): 
+		    self.UCSD_API_KEY = self.GetUserApiKey(user=user)
+		    self.___APIclearCookies___()
 	    res = self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
 	    self.UCSD_API_KEY = self.UCSD_API_KEY_ADMIN
 	    return res
