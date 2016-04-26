@@ -428,6 +428,7 @@ class UCSD:
 		    self.___APIclearCookies___()
 	    res = self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u)
 	    self.UCSD_API_KEY = self.UCSD_API_KEY_ADMIN
+	    self.___APIclearCookies___()
 	    return res
 
     def GetUserLoginProfile(self,user=""):
