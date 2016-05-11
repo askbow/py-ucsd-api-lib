@@ -381,6 +381,16 @@ class UCSD:
         except: return None
         return None
 
+    def CleanVMID(self, iterable=list()):
+        # this is needed sometimes, because some API calls return VM_ID as int, and some - as string.
+        try:
+          if not iterable==list():
+            for i in iterable:
+                i[u'VM_ID'] = int(i[u'VM_ID'])
+        except:
+            pass    
+        return iterable            
+        
     #############################################################################################################
     ## Group functions
     ##
