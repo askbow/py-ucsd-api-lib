@@ -150,6 +150,9 @@ class UCSD:
     def GetReportHistorical(self,contextName, contextValue, reportId, durationName):
         # the return timestamps can be used like this:
         # datetime.datetime.fromtimestamp(dt[u'timestamp']/1000)
+        #
+        # sometimes, returned datapoints come in fomats different from simple float
+        # it MIGHT be useful to normalize it like this: float(str(dt[u'avg']))
         durations = ["hourly", "daily", "weekly", "monthly",]
         if (not any(durationName == a for a in durations)): return None
         a = self.___GetReportHistorical(contextName=contextName, contextValue=contextValue, reportId=reportId, durationName=durationName)
