@@ -148,6 +148,8 @@ class UCSD:
         return res
     
     def GetReportHistorical(self,contextName, contextValue, reportId, durationName):
+        # the return timestamps can be used like this:
+        # datetime.datetime.fromtimestamp(dt[u'timestamp']/1000)
         durations = ["hourly", "daily", "weekly", "monthly",]
         if (not any(durationName == a for a in durations)): return None
         a = self.___GetReportHistorical(contextName=contextName, contextValue=contextValue, reportId=reportId, durationName=durationName)
@@ -156,6 +158,7 @@ class UCSD:
                 if not a[u'serviceError']: return a[u'serviceResult'][u'series']
         except: return None
         return None
+        
 	
     def ___GetReportSnapshot(self,contextName, contextValue, reportId):
 	    # contextValue - u'Group_Name'
