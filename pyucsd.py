@@ -363,6 +363,10 @@ class UCSD:
                            "shutdownGuest",
                            "standby",
                            "suspend",
+                           "createVMwareSnapshot",
+                           "revertVMwareSnapshot",
+                           "configureVmVNC",
+                           "testVmVNCConnection",
                            ]
         if (not any(action == a for a in generic_actions)): 
             return None
