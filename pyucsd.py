@@ -102,6 +102,19 @@ class UCSD:
         except: return None
         return None
      
+    def ___GetStaticIPassignment(self,vdcname):
+        UCSD_API_OPNAME = "userAPIGetTabularReport"
+        u =  '{param0:"22",param1:"' + vdcname + '",param2:"STATIC-IP-ASSIGNMENT-T0"}'
+        res = self.___APIpreparse___(self.___APIcall___(APIOP=UCSD_API_OPNAME, params=u))
+        return res
+
+    def GetStaticIPassignment(self,vdcname):
+        a = self.___GetStaticIPassignment(vdcname)
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult'][u'rows']
+        except: return None
+        return None
         
     #############################################################################################################	
     ## Reporting General
