@@ -390,7 +390,24 @@ class UCSD:
                 if not a[u'serviceError']: return a[u'serviceResult'][u'rows']
         except: return None
         return None
-
+    
+    def ___GetVMSummary(self,vmid):
+        UCSD_API_OPNAME = "userAPIGetVMSummary"
+        param0 = str(vmid)
+        u = "{param0:\"" + param0 + '"}'
+        res = self.___APIpreparse___(self.___APIcall___(APIOP = UCSD_API_OPNAME, params = u))
+        return res
+    
+    def GetVMSummary(self,vmid):
+        a = self.___GetVMSummary(vmid)
+        try:
+            if a:
+                if not a[u'serviceError']: return a[u'serviceResult'][u'rows']
+        except: return None
+        return None
+        
+        
+        
     def CleanVMID(self, iterable=list()):
         # this is needed sometimes, because some API calls return VM_ID as int, and some - as string.
         try:
